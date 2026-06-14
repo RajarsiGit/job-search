@@ -2,7 +2,7 @@ import { API_SOURCES, LINK_BOARDS } from '../data/jobBoards'
 
 const CATEGORIES = ['General', 'Tech', 'Startup', 'Remote', 'India']
 
-export default function Sidebar({ enabledSources, onToggleSource, searchParams, savedCount, view, onViewChange }) {
+export default function Sidebar({ enabledSources, onToggleSource, searchParams, savedCount, view, onViewChange, searchHistory = [], onSearch }) {
   const { query = '', location = '' } = searchParams
 
   const boardsByCategory = CATEGORIES.reduce((acc, cat) => {
@@ -29,7 +29,7 @@ export default function Sidebar({ enabledSources, onToggleSource, searchParams, 
       <div className="px-3 py-2 border-b border-slate-800 flex flex-col gap-0.5">
         <button
           onClick={() => onViewChange('search')}
-          className={`flex items-center gap-2.5 px-2 py-2 rounded-md text-sm w-full transition-colors ${
+          className={`flex items-center gap-2.5 px-2 py-2 rounded-md text-sm w-full transition-colors cursor-pointer ${
             view === 'search'
               ? 'bg-slate-700 text-white'
               : 'text-slate-300 hover:text-white hover:bg-slate-800'
@@ -42,7 +42,7 @@ export default function Sidebar({ enabledSources, onToggleSource, searchParams, 
         </button>
         <button
           onClick={() => onViewChange('saved')}
-          className={`flex items-center gap-2.5 px-2 py-2 rounded-md text-sm w-full transition-colors ${
+          className={`flex items-center gap-2.5 px-2 py-2 rounded-md text-sm w-full transition-colors cursor-pointer ${
             view === 'saved'
               ? 'bg-slate-700 text-white'
               : 'text-slate-300 hover:text-white hover:bg-slate-800'
@@ -58,7 +58,52 @@ export default function Sidebar({ enabledSources, onToggleSource, searchParams, 
             </span>
           )}
         </button>
+        <button
+          onClick={() => onViewChange('history')}
+          className={`flex items-center gap-2.5 px-2 py-2 rounded-md text-sm w-full transition-colors cursor-pointer ${
+            view === 'history'
+              ? 'bg-slate-700 text-white'
+              : 'text-slate-300 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          History
+          {searchHistory.length > 0 && (
+            <span className="ml-auto bg-slate-600 text-slate-300 text-xs font-medium px-1.5 py-0.5 rounded-full leading-none">
+              {searchHistory.length}
+            </span>
+          )}
+        </button>
       </div>
+
+      {searchHistory.length > 0 && (
+        <div className="px-4 py-3 border-b border-slate-800">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+            Recent
+          </p>
+          <div className="flex flex-col gap-0.5">
+            {searchHistory.slice(0, 5).map((entry) => (
+              <button
+                key={entry.timestamp}
+                onClick={() => onSearch({ query: entry.query, location: entry.location })}
+                className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors w-full text-left cursor-pointer"
+              >
+                <svg className="w-3 h-3 text-slate-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                </svg>
+                <span className="truncate flex-1">{entry.query}</span>
+                {entry.location && (
+                  <span className="text-slate-600 truncate shrink-0 max-w-[4rem]">
+                    {entry.location.split(',')[0]}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="px-4 py-4 border-b border-slate-800">
         <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
@@ -117,7 +162,7 @@ export default function Sidebar({ enabledSources, onToggleSource, searchParams, 
                   target="_blank"
                   rel="noopener noreferrer"
                   title={board.description}
-                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors group"
+                  className="flex items-center gap-2 px-2 py-1.5 rounded-md text-sm text-slate-300 hover:text-white hover:bg-slate-800 transition-colors group cursor-pointer"
                 >
                   <span className="text-base leading-none">{board.emoji}</span>
                   <span className="truncate">{board.name}</span>

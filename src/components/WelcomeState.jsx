@@ -6,7 +6,7 @@ const POPULAR = [
   'Frontend Developer', 'DevOps Engineer', 'UX Designer',
 ]
 
-export default function WelcomeState({ onSearch, isLoading }) {
+export default function WelcomeState({ onSearch, isLoading, searchHistory = [] }) {
   return (
     <div className="flex flex-col items-center justify-center flex-1 px-6 py-16">
       <div className="w-full max-w-2xl flex flex-col items-center">
@@ -27,18 +27,37 @@ export default function WelcomeState({ onSearch, isLoading }) {
         </div>
 
         {/* Popular chips */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <div className={`flex flex-wrap justify-center gap-2 ${searchHistory.length > 0 ? 'mb-4' : 'mb-12'}`}>
           <span className="text-xs text-gray-400 self-center mr-1">Try:</span>
           {POPULAR.map((q) => (
             <button
               key={q}
               onClick={() => onSearch({ query: q, location: '' })}
-              className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
             >
               {q}
             </button>
           ))}
         </div>
+
+        {/* Recent searches */}
+        {searchHistory.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            <span className="text-xs text-gray-400 self-center mr-1">Recent:</span>
+            {searchHistory.slice(0, 5).map((h) => (
+              <button
+                key={h.timestamp}
+                onClick={() => onSearch({ query: h.query, location: h.location })}
+                className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 bg-white hover:border-purple-400 hover:text-purple-600 hover:bg-purple-50 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {h.query}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Source cards */}
         <div className="w-full grid grid-cols-3 gap-3">

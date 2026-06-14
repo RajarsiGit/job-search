@@ -34,7 +34,7 @@ export default function SearchForm({ onSearch, isLoading }) {
       <button
         type="submit"
         disabled={isLoading}
-        className="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2 shrink-0 shadow-sm"
+        className="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2 shrink-0 shadow-sm cursor-pointer"
       >
         {isLoading ? (
           <>

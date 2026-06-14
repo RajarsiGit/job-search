@@ -30,7 +30,7 @@ export default function Footer() {
           href="https://www.linkedin.com/in/rajarsi-saha-2709a297/"
           target="_blank"
           rel="noopener noreferrer"
-          className="font-medium text-gray-500 hover:text-blue-600 transition-colors"
+          className="font-medium text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
         >
           Rajarsi Saha
         </a>

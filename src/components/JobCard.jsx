@@ -27,7 +27,7 @@ export default function JobCard({ job, isSaved, onToggleSave }) {
           <button
             onClick={() => onToggleSave(job.id, job)}
             title={isSaved ? 'Remove from saved' : 'Save job'}
-            className={`p-1.5 rounded-md transition-colors ${
+            className={`p-1.5 rounded-md transition-colors cursor-pointer ${
               isSaved
                 ? 'text-yellow-500 bg-yellow-50 hover:bg-yellow-100'
                 : 'text-gray-300 hover:text-gray-500 hover:bg-gray-50'
@@ -45,7 +45,7 @@ export default function JobCard({ job, isSaved, onToggleSave }) {
           href={job.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-base font-semibold text-gray-900 hover:text-blue-600 line-clamp-2 leading-snug"
+          className="text-base font-semibold text-gray-900 hover:text-blue-600 line-clamp-2 leading-snug cursor-pointer"
         >
           {job.title}
         </a>
@@ -91,7 +91,7 @@ export default function JobCard({ job, isSaved, onToggleSave }) {
           href={job.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1"
+          className="text-xs font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 cursor-pointer"
         >
           View job
           <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

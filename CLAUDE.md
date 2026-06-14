@@ -19,8 +19,9 @@ npm run lint      # ESLint
 All state lives in `App.jsx` and is passed down as props. No external state library. Key state:
 - `jobs` — fetched results array
 - `savedJobs` — `Map<id, jobObject>` persisted to localStorage under `jobhub:saved-jobs`
+- `searchHistory` — array of `{ query, location, timestamp }` persisted to localStorage under `jobhub:search-history`; max 50 entries, most-recent-first, deduped by query+location
 - `enabledSources` — `Set<sourceId>` of toggled-on API sources
-- `hasSearched` / `view` — controls whether to show WelcomeState or results
+- `hasSearched` / `view` — controls which main panel is shown
 
 ### Data layer (`src/data/jobBoards.js`)
 Two exports:
@@ -34,9 +35,10 @@ Nominatim returns verbose strings like `"San Francisco, California, United State
 - **The Muse** — accepts city name; use `cityOnly()` helper to strip country/state suffix before sending
 
 ### Views
-- `view === 'search'` + `!hasSearched` → `WelcomeState` (hero + source cards)
+- `view === 'search'` + `!hasSearched` → `WelcomeState` (hero + popular/recent chips + source cards)
 - `view === 'search'` + `hasSearched` → compact header + `JobGrid`
 - `view === 'saved'` → compact header + `JobGrid` fed from `savedJobs` map
+- `view === 'history'` → compact header + full search history list (up to 50 entries, each re-runnable or individually deletable)
 
 ## Key Files
 
@@ -44,8 +46,8 @@ Nominatim returns verbose strings like `"San Francisco, California, United State
 |---|---|
 | `src/App.jsx` | Root layout, all shared state, search orchestration |
 | `src/data/jobBoards.js` | All API + link board configs; add new sources here |
-| `src/components/Sidebar.jsx` | Nav (Search/Saved), source toggles, link board list |
-| `src/components/WelcomeState.jsx` | Landing hero with popular searches + source cards |
+| `src/components/Sidebar.jsx` | Nav (Search/Saved/History), recent searches, source toggles, link board list |
+| `src/components/WelcomeState.jsx` | Landing hero with popular searches, recent search chips + source cards |
 | `src/components/SearchForm.jsx` | Keyword input + LocationInput |
 | `src/components/LocationInput.jsx` | Debounced Nominatim autocomplete with keyboard nav |
 | `src/components/JobCard.jsx` | Job listing card; calls `onToggleSave(id, jobObject)` |
@@ -106,6 +108,7 @@ Add to `LINK_BOARDS` in `src/data/jobBoards.js`:
 | Key | Value |
 |---|---|
 | `jobhub:saved-jobs` | JSON object keyed by job ID, values are full job objects |
+| `jobhub:search-history` | JSON array of `{ query, location, timestamp }`, max 50, newest first |
 
 ## Known Constraints
 

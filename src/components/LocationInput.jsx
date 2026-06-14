@@ -132,7 +132,7 @@ export default function LocationInput({ value, onChange }) {
               <button
                 type="button"
                 onPointerDown={(e) => { e.preventDefault(); select(s) }}
-                className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors ${
+                className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2 transition-colors cursor-pointer ${
                   i === activeIndex ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
