@@ -1,6 +1,6 @@
 import { API_SOURCES, LINK_BOARDS } from '../data/jobBoards'
 
-const CATEGORIES = ['General', 'Tech', 'Startup', 'Remote']
+const CATEGORIES = ['General', 'Tech', 'Startup', 'Remote', 'India']
 
 export default function Sidebar({ enabledSources, onToggleSource, searchParams, savedCount, view, onViewChange }) {
   const { query = '', location = '' } = searchParams

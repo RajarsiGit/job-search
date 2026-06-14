@@ -231,4 +231,64 @@ export const LINK_BOARDS = [
     buildUrl: (q) =>
       `https://weworkremotely.com/remote-jobs/search?term=${encodeURIComponent(q)}`,
   },
+  {
+    id: 'naukri',
+    name: 'Naukri',
+    description: "India's largest job portal",
+    emoji: '🇮🇳',
+    color: '#4A90D9',
+    category: 'India',
+    buildUrl: (q, loc) =>
+      `https://www.naukri.com/${encodeURIComponent(q.toLowerCase().replace(/\s+/g, '-'))}-jobs?k=${encodeURIComponent(q)}&l=${encodeURIComponent(cityOnly(loc))}`,
+  },
+  {
+    id: 'foundit',
+    name: 'Foundit',
+    description: 'Monster India — jobs across sectors',
+    emoji: '🔍',
+    color: '#7B2FBE',
+    category: 'India',
+    buildUrl: (q, loc) =>
+      `https://www.foundit.in/srp/results?query=${encodeURIComponent(q)}&location=${encodeURIComponent(cityOnly(loc))}`,
+  },
+  {
+    id: 'shine',
+    name: 'Shine',
+    description: 'HindustanTimes-backed job board',
+    emoji: '✨',
+    color: '#F5A623',
+    category: 'India',
+    buildUrl: (q, loc) =>
+      `https://www.shine.com/job-search/${encodeURIComponent(q.toLowerCase().replace(/\s+/g, '-'))}-jobs/?q=${encodeURIComponent(q)}&location=${encodeURIComponent(cityOnly(loc))}`,
+  },
+  {
+    id: 'timesjobs',
+    name: 'TimesJobs',
+    description: 'Times Group job listings',
+    emoji: '📰',
+    color: '#E2231A',
+    category: 'India',
+    buildUrl: (q, loc) =>
+      `https://www.timesjobs.com/candidate/job-search.html?searchType=personalizedSearch&from=submit&txtKeywords=${encodeURIComponent(q)}&txtLocation=${encodeURIComponent(cityOnly(loc))}`,
+  },
+  {
+    id: 'hirist',
+    name: 'Hirist',
+    description: 'Tech & IT jobs in India',
+    emoji: '💻',
+    color: '#00B4D8',
+    category: 'India',
+    buildUrl: (q) =>
+      `https://www.hirist.tech/search/${encodeURIComponent(q)}`,
+  },
+  {
+    id: 'internshala',
+    name: 'Internshala',
+    description: 'Internships & fresher jobs',
+    emoji: '🎓',
+    color: '#18A558',
+    category: 'India',
+    buildUrl: (q) =>
+      `https://internshala.com/jobs/keywords-${encodeURIComponent(q.toLowerCase().replace(/\s+/g, '-'))}/`,
+  },
 ];
