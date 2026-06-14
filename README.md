@@ -1,22 +1,29 @@
-# JobHub — Unified Job Search
+# JobHub — Unified Job Search Aggregator
 
-> Search once. Hit every board.
+> Search once across multiple job boards simultaneously — no tab-switching needed.
 
-JobHub queries multiple job APIs in parallel and surfaces results in one clean interface. No backend, no login, no API keys required.
+[![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=white&style=flat-square)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8-646cff?logo=vite&logoColor=white&style=flat-square)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?logo=tailwindcss&logoColor=white&style=flat-square)](https://tailwindcss.com)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=flat-square)](https://rajarsigit.github.io/job-search/)
 
-**Built by [Rajarsi Saha](https://www.linkedin.com/in/rajarsi-saha-2709a297/)**
+**[🔗 Live Demo](https://rajarsigit.github.io/job-search/) · Built by [Rajarsi Saha](https://www.linkedin.com/in/rajarsi-saha-2709a297/)**
+
+JobHub is a client-side React app that aggregates job listings from multiple live job board APIs into a single, unified interface. Instead of opening a dozen tabs, you type once and get results from Remotive, Arbeitnow, and The Muse simultaneously. It also links out to 20+ popular job boards — LinkedIn, Indeed, Glassdoor, Naukri, Wellfound, and more — pre-filled with your search query.
 
 ---
 
 ## Features
 
 - **Multi-source live search** — Remotive, Arbeitnow, and The Muse queried simultaneously
-- **18 link boards** — LinkedIn, Indeed, Naukri, YC, Wellfound, and more open with your query pre-filled
+- **Search history** — last 50 searches saved locally; re-run any past search in one click
+- **20+ link boards** — LinkedIn, Indeed, Glassdoor, Naukri, YC, Wellfound, and more open with your query pre-filled
 - **Location autocomplete** — debounced Nominatim (OpenStreetMap) suggestions, no API key needed
 - **Save jobs** — bookmark any listing; persists across sessions via `localStorage`
 - **Source toggles** — enable or disable individual API sources per search
 - **Responsive grid** — 1 → 2 → 3 column layout that adapts to viewport width
-- **Popular searches** — one-click shortcuts on the welcome screen
+- **India job boards** — dedicated category for Naukri, Foundit, Shine, TimesJobs, Hirist, Internshala
+- **100% client-side** — no backend, no login, no API keys required
 
 ---
 
@@ -59,8 +66,8 @@ src/
 ├── data/
 │   └── jobBoards.js         # All API + link board configs — add new sources here
 ├── components/
-│   ├── Sidebar.jsx          # Nav, source toggles, link board list
-│   ├── WelcomeState.jsx     # Hero shown before first search
+│   ├── Sidebar.jsx          # Nav (Search/Saved/History), recent searches, source toggles, link boards
+│   ├── WelcomeState.jsx     # Hero shown before first search with popular + recent chips
 │   ├── SearchForm.jsx       # Keyword + location bar
 │   ├── LocationInput.jsx    # Debounced Nominatim autocomplete with keyboard nav
 │   ├── JobCard.jsx          # Job listing card with save toggle
@@ -151,6 +158,15 @@ Add an entry to `LINK_BOARDS` in `src/data/jobBoards.js`:
 
 ---
 
+## localStorage Keys
+
+| Key | Value |
+|---|---|
+| `jobhub:saved-jobs` | JSON object keyed by job ID, values are full job objects |
+| `jobhub:search-history` | JSON array of `{ query, location, timestamp }`, max 50, newest first |
+
+---
+
 ## License
 
-For personal use only.
+For personal use only. Built by [Rajarsi Saha](https://www.linkedin.com/in/rajarsi-saha-2709a297/).
