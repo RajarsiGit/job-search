@@ -24,7 +24,11 @@ export default function Footer() {
         ))}
       </div>
 
-      <span className="text-gray-300">For personal use only</span>
+      <span className="text-gray-400">
+        Built by{' '}
+        <span className="font-medium text-gray-500">Rajarsi Saha</span>
+        {' '}· For personal use only
+      </span>
     </footer>
   )
 }
