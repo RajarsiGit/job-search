@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(mkdir -p \"D:/git-projects/job-search/.claude/commands\")",
+      "Bash(mv \"D:/git-projects/job-search/.claude/skills/sync-docs.md\" \"D:/git-projects/job-search/.claude/commands/sync-docs.md\")"
     ]
   }
 }

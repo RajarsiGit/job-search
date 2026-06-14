@@ -1,102 +1,156 @@
 # JobHub — Unified Job Search
 
-A single-pane-of-glass job search dashboard that queries multiple job boards simultaneously, so you never need to switch tabs.
+> Search once. Hit every board.
+
+JobHub queries multiple job APIs in parallel and surfaces results in one clean interface. No backend, no login, no API keys required.
+
+**Built by [Rajarsi Saha](https://www.linkedin.com/in/rajarsi-saha-2709a297/)**
+
+---
 
 ## Features
 
-- **Multi-source search** — fetches live results from Remotive, Arbeitnow, and The Muse in parallel
-- **Quick-link boards** — 12 external boards (LinkedIn, Indeed, Glassdoor, Dice, Wellfound, etc.) open with your search query pre-filled
-- **Location autocomplete** — powered by OpenStreetMap Nominatim, no API key required
-- **Save jobs** — bookmark any listing; saved jobs persist across sessions via localStorage
+- **Multi-source live search** — Remotive, Arbeitnow, and The Muse queried simultaneously
+- **18 link boards** — LinkedIn, Indeed, Naukri, YC, Wellfound, and more open with your query pre-filled
+- **Location autocomplete** — debounced Nominatim (OpenStreetMap) suggestions, no API key needed
+- **Save jobs** — bookmark any listing; persists across sessions via `localStorage`
 - **Source toggles** — enable or disable individual API sources per search
+- **Responsive grid** — 1 → 2 → 3 column layout that adapts to viewport width
 - **Popular searches** — one-click shortcuts on the welcome screen
-- **Responsive grid** — 1 → 2 → 3 column layout adapts to viewport width
+
+---
 
 ## Tech Stack
 
 | Layer | Choice |
 |---|---|
 | Framework | React 19 |
-| Build tool | Vite 8 |
-| Styling | Tailwind CSS v4 (Vite plugin) |
+| Build | Vite 8 |
+| Styling | Tailwind CSS v4 (Vite plugin, no config file) |
 | Location API | OpenStreetMap Nominatim (free, no key) |
-| Job APIs | Remotive, Arbeitnow, The Muse (all free, no key) |
-| Persistence | localStorage |
+| Job APIs | Remotive, Arbeitnow, The Muse (free, no key) |
+| Persistence | `localStorage` |
+
+---
 
 ## Getting Started
 
 ```bash
 npm install
-npm run dev
+npm run dev        # http://localhost:5173
 ```
-
-Open [http://localhost:5173](http://localhost:5173).
-
-## Available Scripts
 
 | Command | Description |
 |---|---|
-| `npm run dev` | Start dev server with HMR |
-| `npm run build` | Production build to `dist/` |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint |
+| `npm run dev` | Dev server with HMR |
+| `npm run build` | Production build → `dist/` |
+| `npm run preview` | Serve `dist/` locally |
+| `npm run lint` | ESLint |
+
+---
 
 ## Project Structure
 
 ```
 src/
+├── App.jsx                  # Root layout, all shared state, search orchestration
+├── index.css                # Single Tailwind import
+├── main.jsx                 # React entry point
 ├── data/
-│   └── jobBoards.js        # API source configs + fetch functions, link board configs
+│   └── jobBoards.js         # All API + link board configs — add new sources here
 ├── components/
-│   ├── Footer.jsx           # Attribution + copyright bar
-│   ├── JobCard.jsx          # Individual job listing card
-│   ├── JobGrid.jsx          # Responsive grid with skeleton loading
-│   ├── LocationInput.jsx    # Debounced location autocomplete
-│   ├── SearchForm.jsx       # Keyword + location search bar
-│   ├── Sidebar.jsx          # Nav, source toggles, link boards
-│   └── WelcomeState.jsx     # Hero screen shown before first search
-├── utils/
-│   └── time.js              # Relative time formatter
-├── App.jsx                  # Root layout + shared state
-├── index.css                # Tailwind import
-└── main.jsx                 # React entry point
+│   ├── Sidebar.jsx          # Nav, source toggles, link board list
+│   ├── WelcomeState.jsx     # Hero shown before first search
+│   ├── SearchForm.jsx       # Keyword + location bar
+│   ├── LocationInput.jsx    # Debounced Nominatim autocomplete with keyboard nav
+│   ├── JobCard.jsx          # Job listing card with save toggle
+│   ├── JobGrid.jsx          # Responsive grid, skeleton loader, empty states
+│   └── Footer.jsx           # Copyright + API attribution
+└── utils/
+    └── time.js              # relativeTime() — ISO date → "3d ago"
 ```
 
-## API Sources
+---
 
-| Source | Notes |
+## Live API Sources
+
+Queried on every search. No registration needed.
+
+| Source | What it covers | Location handling |
+|---|---|---|
+| [Remotive](https://remotive.com/api/remote-jobs) | Remote tech jobs | Client-side filter |
+| [Arbeitnow](https://www.arbeitnow.com/api/job-board-api) | Global & visa-sponsored jobs | Client-side filter |
+| [The Muse](https://www.themuse.com/api/public/jobs) | Company culture & careers | API param (city name) |
+
+Each source appears as a toggle in the sidebar and as a card on the welcome screen.
+
+---
+
+## Link Boards
+
+Open in new tabs with your search query pre-filled.
+
+| Category | Boards |
 |---|---|
-| [Remotive](https://remotive.com/api/remote-jobs) | Remote-only jobs; location filtered client-side |
-| [Arbeitnow](https://www.arbeitnow.com/api/job-board-api) | Global jobs; location filtered client-side |
-| [The Muse](https://www.themuse.com/api/public/jobs) | Supports server-side city-name location filter |
+| General | LinkedIn, Indeed, Glassdoor, SimplyHired |
+| Tech | Dice, Built In, Levels.fyi, HN: Who's Hiring |
+| Startup | Wellfound, YC Work at a Startup |
+| Remote | Remote OK, We Work Remotely |
+| India | Naukri, Foundit, Shine, TimesJobs, Hirist, Internshala |
 
-All three APIs are free and CORS-enabled — no registration or API keys needed.
+---
 
-## Adding a New API Source
+## Extending JobHub
 
-1. Add an entry to the `API_SOURCES` array in `src/data/jobBoards.js`
-2. Implement `fetchJobs(query, location)` returning an array of job objects with the standard shape:
+### Add a live API source
+
+1. Add an entry to `API_SOURCES` in `src/data/jobBoards.js`
+2. Implement `fetchJobs(query, location)` returning an array shaped like:
 
 ```js
 {
-  id, title, company, location, remote,
-  url, postedAt, salary, tags,
-  source, sourceName, sourceColor
+  id: string,          // unique — prefix with source id, e.g. "mysource-123"
+  title: string,
+  company: string,
+  location: string,
+  remote: boolean,
+  url: string,
+  postedAt: string,    // ISO date string
+  salary: string | null,
+  tags: string[],
+  source: string,
+  sourceName: string,
+  sourceColor: string, // hex color for badge
 }
 ```
 
-## Adding a New Link Board
+### Add a link board
 
 Add an entry to `LINK_BOARDS` in `src/data/jobBoards.js`:
 
 ```js
 {
-  id, name, description, emoji, color,
-  category,  // 'General' | 'Tech' | 'Startup' | 'Remote'
-  buildUrl: (query, location) => `https://...`
+  id: 'myboard',
+  name: 'My Board',
+  description: 'Short description',
+  emoji: '🔗',
+  color: '#hex',
+  category: 'General', // 'General' | 'Tech' | 'Startup' | 'Remote' | 'India'
+  buildUrl: (query, location) =>
+    `https://myboard.com/search?q=${encodeURIComponent(query)}`,
 }
 ```
 
+---
+
+## Known Constraints
+
+- **LinkedIn, Indeed, Glassdoor** block iframe embedding via `X-Frame-Options` — they open as link boards rather than live results.
+- **Remotive & Arbeitnow** have no server-side location param; up to 50 results are fetched per search and filtered client-side down to 20.
+- **Nominatim** requires one request per second max and a `User-Agent`. The location input debounces at 300 ms to stay within policy.
+
+---
+
 ## License
 
-MIT
+For personal use only.

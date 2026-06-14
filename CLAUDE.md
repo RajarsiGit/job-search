@@ -96,7 +96,7 @@ Add to `LINK_BOARDS` in `src/data/jobBoards.js`:
   description: 'Short description',
   emoji: '🔗',
   color: '#hex',
-  category: 'General', // 'General' | 'Tech' | 'Startup' | 'Remote'
+  category: 'General', // 'General' | 'Tech' | 'Startup' | 'Remote' | 'India'
   buildUrl: (query, location) => `https://myboard.com/search?q=${encodeURIComponent(query)}`,
 }
 ```
