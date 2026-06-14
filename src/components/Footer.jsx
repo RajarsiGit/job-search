@@ -26,7 +26,14 @@ export default function Footer() {
 
       <span className="text-gray-400">
         Built by{' '}
-        <span className="font-medium text-gray-500">Rajarsi Saha</span>
+        <a
+          href="https://www.linkedin.com/in/rajarsi-saha-2709a297/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          Rajarsi Saha
+        </a>
         {' '}· For personal use only
       </span>
     </footer>
